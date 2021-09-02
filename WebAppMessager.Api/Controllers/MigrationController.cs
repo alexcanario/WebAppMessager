@@ -1,15 +1,14 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 using WebAppMessager.Business.Interfaces;
 using WebAppMessager.Business.Models;
 
-namespace WebAppMessager.Api.Controllers {
+namespace WebAppMessager.Api.Controllers
+{
     [ApiController]
     [Route("api/[controller]")]
     public class MigrationController : Controller {
@@ -23,6 +22,7 @@ namespace WebAppMessager.Api.Controllers {
         [ProducesResponseType(typeof(IEnumerable<Leitura>), 200)]
         public async Task<IActionResult> GetAll() {
             _leituraList = await ObterLeituras();
+            
             if(_leituraList is null) return NotFound();
 
             return Ok(_leituraList);
@@ -31,6 +31,7 @@ namespace WebAppMessager.Api.Controllers {
         [HttpGet("ObterLeiturasPorPeriodo")]
         public async Task<IActionResult> GetByPeriod(Period period) {
             _leituraList = await ObterLeiturasPorPeriodo(period);
+
             if(_leituraList is null) return NotFound();
 
             return Ok(_leituraList);
@@ -56,16 +57,14 @@ namespace WebAppMessager.Api.Controllers {
 
         private async Task<IEnumerable<ILeitura>> ObterLeituras() {
             var leituras = await _leituraService.GetAll();
-            if (leituras is null) return null;
 
-            return leituras;
+            return leituras ?? null;
         }
 
         private async Task<IEnumerable<ILeitura>> ObterLeiturasPorPeriodo(Period period) {
             var leituras = await _leituraService.GetByPeriod(period);
-            if(leituras is null) return null;
 
-            return leituras; ;
+            return leituras ?? null;
         }
     }
 }

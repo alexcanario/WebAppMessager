@@ -35,9 +35,9 @@ namespace WebAppMessager.Data.Repositories {
 
         public async Task<IEnumerable<ILeitura>> GetAll() {
             try {
-                using var con = new SqlConnection(_connectionString);
+                await using var con = new SqlConnection(ConnectionString);
                 var data = con.Query<DateTime>(_sqlDefault);
-                var leituras = await con.QueryAsync<ILeitura>(_sqlGetAllLeituras);
+                var leituras = await con.QueryAsync<Leitura>(_sqlGetAllLeituras);
                 return leituras;
             } catch (Exception ex) {
                 throw new Exception(ex.Message, ex);
@@ -45,8 +45,8 @@ namespace WebAppMessager.Data.Repositories {
         }
 
         public async Task<IEnumerable<ILeitura>> GetByPeriod(Period periodo) {
-            using var con = new SqlConnection(_connectionString);
-            var leituras = await con.QueryAsync<ILeitura>(_sqlGetAllLeiturasByPeriod, new { initialDate = periodo.InitialDate, finalDate = periodo.FinalDate });
+            await using var con = new SqlConnection(ConnectionString);
+            var leituras = await con.QueryAsync<Leitura>(_sqlGetAllLeiturasByPeriod, new { initialDate = periodo.InitialDate, finalDate = periodo.FinalDate });
             return leituras;
         }
     }
